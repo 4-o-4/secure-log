@@ -2,7 +2,6 @@ package ru.secured;
 
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.pattern.Converter;
 import ch.qos.logback.core.pattern.ConverterUtil;
 import ch.qos.logback.core.pattern.parser.Node;
@@ -26,8 +25,7 @@ public class HidingLayout extends PatternLayout {
 
     @Override
     public String doLayout(ILoggingEvent event) {
-        if (!isStarted()) return CoreConstants.EMPTY_STRING;
-        return writeLoopOnConverters(event);
+        return super.doLayout(event);
     }
 
     @Override
