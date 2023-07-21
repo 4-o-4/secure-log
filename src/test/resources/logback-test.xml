@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+    <import class="ch.qos.logback.core.ConsoleAppender"/>
+    <import class="ch.qos.logback.core.FileAppender"/>
+    <import class="ch.qos.logback.classic.AsyncAppender"/>
+
+    <conversionRule conversionWord="mask_msg"
+                    converterClass="ru.secured.SecuredLogbackConverter"/>
+    <property name="HOME_LOG" value="logs/app.log"/>
+    <variable name="CUSTOM_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger - %mask_msg%n"/>
+
+    <appender name="CONSOLE" class="ConsoleAppender">
+        <encoder>
+            <pattern>%highlight(%level) %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="FileAppender">
+        <file>${HOME_LOG}</file>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ru.secured.HidingLayout">
+                <hiddenKeys>
+                    $.name
+                </hiddenKeys>
+                <pattern>${CUSTOM_LOG_PATTERN}</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <logger name="ru.secured" level="INFO" class="AsyncAppender">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <root class="AsyncAppender">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
