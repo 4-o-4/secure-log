@@ -12,15 +12,14 @@ public class SecuredLogbackConverter extends ClassicConverter {
     private Function<Object, String> initialHandler;
 
     public void setInitialHandler(List<String> sensitivePaths) {
-        this.initialHandler = new JsonPathMaskingHandler(sensitivePaths);
+        this.initialHandler = new JsonMaskingHandler(sensitivePaths);
     }
 
     @Override
     public String convert(ILoggingEvent event) {
         Object[] arguments = event.getArgumentArray();
-        if (arguments == null || arguments.length < 1) {
+        if (arguments == null || arguments.length < 1)
             return event.getFormattedMessage();
-        }
         return generateMessageWithHiddenSensitiveData(event);
     }
 
