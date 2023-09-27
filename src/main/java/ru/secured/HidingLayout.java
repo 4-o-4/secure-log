@@ -30,7 +30,7 @@ public class HidingLayout extends PatternLayout {
 
     @Override
     public void start() {
-        if (getPattern() == null || getPattern().length() == 0) {
+        if (getPattern() == null || getPattern().isEmpty()) {
             addError("Empty or null pattern.");
             return;
         }
@@ -59,7 +59,7 @@ public class HidingLayout extends PatternLayout {
         Converter<ILoggingEvent> c = head;
         while (c != null) {
             if (c instanceof SecuredLogbackConverter) {
-                ((SecuredLogbackConverter) c).setInitialHandler(sensitivePaths);
+                ((SecuredLogbackConverter) c).setInitialHandler(this.sensitivePaths);
             }
             c.write(strBuilder, event);
             c = c.getNext();
