@@ -8,6 +8,11 @@ import com.jayway.jsonpath.ParseContext;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -42,11 +47,21 @@ public class JsonMaskingHandler implements Function<Object, String> {
         }
     }
 
-    private DocumentContext objectToContext(Object argument) {
+    private DocumentContext objectToContext(Object argument) throws IOException, ClassNotFoundException {
         ParseContext context = JsonPath.using(JSON_PATH_CONFIG);
         return argument instanceof String
                 ? context.parse(argument.toString())
-                : context.parse(argument);
+                : context.parse(deepClone(argument));
+    }
+
+    private Object deepClone(Object argument) throws IOException, ClassNotFoundException {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            oos.writeObject(argument);
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            return ois.readObject();
+        }
     }
 
     private String maskData(DocumentContext context, String path) {
