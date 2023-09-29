@@ -21,7 +21,7 @@
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
             <layout class="ru.secured.HidingLayout">
                 <hiddenKeys>
-                    $.name
+                    $.[*].name
                 </hiddenKeys>
                 <pattern>${CUSTOM_LOG_PATTERN}</pattern>
             </layout>
