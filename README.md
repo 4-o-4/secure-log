@@ -2,7 +2,8 @@
 
 #### Template for logback.xml
 ```xml
-<conversionRule conversionWord="mask_msg" converterClass="ru.secured.SecuredLogbackConverter"/>
+<conversionRule conversionWord="mask_msg"
+    converterClass="ru.secured.SecuredLogbackConverter"/>
 
 <appender name="FILE" class="FileAppender">
     <file>${HOME_LOG}</file>
